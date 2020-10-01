@@ -1,6 +1,6 @@
 # DocxMailmerge
 
-Docx MailMerge takes a Word document (.docx) with mail merge fields and replaces the mail merge fields with data.
+DocxMailmerge is a Ruby port of the Python [docx-mailmerge](https://github.com/Bouke/docx-mailmerge/) library. It currently only supports simple merge fields (without inner formatting) and does not support image merge.
 
 ## Installation
 
@@ -17,35 +17,32 @@ Or install it yourself as:
     $ gem install docx_mailmerge
 
 ## Usage
-```ruby
-docx_template = DocxMailmerge::DocxCreator.new(template_docx_file_path)
-merge_data = {first_name: "Anita", last_name: "Borg"}
-```
-and then
-```ruby
-  docx_template.generate_docx_file(merge_data, output_file_path)
-```
-or
 
-```ruby
-  docx_bytes = docx_template.generate_docx_bytes(merge_data)
-```
+To begin, open a merge file:
 
-You can also get an array of merge fields in a document
-```ruby
-  docx_template.merge_field_names
-```
+    require 'docx_mailmerge'
+    document = DocxMailmerge::MailMerge.new('doc.docx')
 
-You may also replace all missing values with XXXXXXXXXX by setting the second argument to "blank" or "nil" to DocxMailmerge::DocxCreator.new
-```ruby
-docx_template = DocxMailmerge::DocxCreator.new(template_docx_file_path, "blank")
-```
+To figure out which fields are available, list all merge fields:
 
+    puts document.fields
+
+Do the actual merge:
+
+    document.merge(foo: 'Test')
+
+Get the output stream:
+
+    document.generate
+
+Alternatively, write to a file:
+
+    document.write('doc_merged.docx')
 
 ## Contributing
-To run the test you'll need docx2txt, a Perl library available at http://docx2txt.sourceforge.net/.  The test expects it at #{GEM_ROOT}/docx2txt/docx2txt.pl
 
-If you'd automatically like to open the resulting word documents when you run rspec `WORD=true rspec`
-
-
-
+1. Fork it ( https://github.com/[my-github-username]/docx_mailmerge/fork )
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create a new Pull Request
